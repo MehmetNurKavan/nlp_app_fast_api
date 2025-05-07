@@ -1,4 +1,3 @@
-# tokenization.py
 from transformers import pipeline
 
 tokenizer_pipeline = pipeline("ner")
