@@ -1,12 +1,10 @@
 from services.sentiment_analysis import analyze_sentiment
-from services.translation import translate_text
 from services.tokenization import tokenize_text
 
 def process_text(data: str, operation: str):
     # Operation mapping: operation türüne göre doğru servisi çalıştır
     operations = {
         "sentiment": analyze_sentiment,
-        "translate": translate_text,
         "tokenize": tokenize_text,
     }
 
