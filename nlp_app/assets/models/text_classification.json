@@ -1,0 +1,9 @@
+{
+    "title": "Metin Sınıflandırma",
+    "description": "Bu model metni kategorilere ayırır (örneğin haber, eğlence, spor).",
+    "input_text_placeholder": "Sınıflandırılacak metni girin...",
+    "output_text_placeholder": "Kategori sonucu burada görünecek...",
+    "operation": "classify",
+    "fileName": "text_classification",
+    "code": "from transformers import pipeline\n\nclassifier_pipeline = pipeline(\"zero-shot-classification\")\n\ndef classify_text(text: str, candidate_labels: list) -> str:\n    result = classifier_pipeline(text, candidate_labels=candidate_labels)\n    return result['labels'][0]"
+}

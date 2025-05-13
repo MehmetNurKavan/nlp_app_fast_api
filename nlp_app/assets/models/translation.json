@@ -1,0 +1,9 @@
+{
+    "title": "Çeviri",
+    "description": "Bu model metni İngilizce'den Türkçe'ye çevirir.",
+    "input_text_placeholder": "Çevrilecek İngilizce metni girin...",
+    "output_text_placeholder": "Türkçeye çevrilmiş metin burada görünecek...",
+    "operation": "translate",
+    "fileName": "translation",
+    "code": "from transformers import pipeline\n\ntranslator = pipeline(\"translation_en_to_tr\")\n\ndef translate_text(text: str) -> str:\n    translated = translator(text, max_length=40)\n    return translated[0][\"translation_text\"]"
+}

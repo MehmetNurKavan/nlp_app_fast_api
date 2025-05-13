@@ -1,0 +1,9 @@
+{
+    "title": "Metin Özetleme",
+    "description": "Bu model uzun metinleri kısa bir özet haline getirir.",
+    "input_text_placeholder": "Özetlenecek metni girin...",
+    "output_text_placeholder": "Metnin özeti burada görünecek...",
+    "operation": "summarization",
+    "fileName": "summarization",
+    "code": "from transformers import pipeline\n\nsummarizer = pipeline(\"summarization\")\n\ndef summarize_text(text: str) -> str:\n    summary = summarizer(text, max_length=130, min_length=30, do_sample=False)\n    return summary[0][\"summary_text\"]"
+}

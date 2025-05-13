@@ -1,0 +1,9 @@
+{
+    "title": "Soru Cevaplama",
+    "description": "Bu model bir bağlam içinden verilen soruya cevap üretir.",
+    "input_text_placeholder": "Soru ve bağlamı girin (JSON formatında: {'question': '...', 'context': '...'})",
+    "output_text_placeholder": "Cevap burada görünecek...",
+    "operation": "aq",
+    "fileName": "question_answer",
+    "code": "from transformers import pipeline\n\nqa_pipeline = pipeline(\"question-answering\")\n\ndef answer_question(context: str, question: str) -> str:\n    result = qa_pipeline(question=question, context=context)\n    return result[\"answer\"]"
+}

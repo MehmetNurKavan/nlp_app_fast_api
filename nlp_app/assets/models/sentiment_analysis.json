@@ -1,0 +1,9 @@
+{
+  "title": "Duygu Analizi",
+  "description": "Bu model metindeki duyguyu (olumlu, olumsuz, nötr) analiz eder.",
+  "input_text_placeholder": "Analiz edilecek metni girin...",
+  "output_text_placeholder": "Duygu analizi sonucu burada görünecek...",
+  "operation": "sentiment",
+  "fileName": "sentiment_analysis",
+  "code": "from transformers import pipeline\n\nclassifier = pipeline(\"sentiment-analysis\")\n\ndef analyze_sentiment(text: str) -> str:\n    result = classifier(text)\n    sentiment = result[0][\"label\"]\n    return sentiment"
+}

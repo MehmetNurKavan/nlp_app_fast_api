@@ -1,0 +1,9 @@
+{
+    "title": "Varlık Tanıma (NER)",
+    "description": "Bu model metindeki özel isimleri (kişi, kurum, yer vs.) tanır.",
+    "input_text_placeholder": "Varlıkları tanımlamak için metni girin...",
+    "output_text_placeholder": "Tanımlanan varlıklar burada listelenecek...",
+    "operation": "recognize_entities",
+    "fileName": "named_entity",
+    "code": "from transformers import pipeline\n\nner_pipeline = pipeline(\"ner\")\n\ndef recognize_entities(text: str) -> str:\n    result = ner_pipeline(text)\n    return result"
+  }

@@ -1,0 +1,9 @@
+{
+  "title": "Tokenization",
+  "description": "Metinleri kelimelere ve cümlelere ayırır. Bu, metin analizi için temel bir adımdır.",
+  "input_text_placeholder": "Buraya metin girin...",
+  "output_text_placeholder": "Tokenlar burada görünecek...",
+  "operation": "tokenization",
+  "fileName": "tokenization",
+  "code": "from transformers import pipeline\nfrom pipelines.tokenization import tokenizer_pipeline\n\ntokenizer_pipeline = pipeline(\"token-classification\")\n\ndef tokenize_text(text: str) -> str:\n    result = tokenizer_pipeline(text)\n    return [token['word'] for token in result]"
+}
