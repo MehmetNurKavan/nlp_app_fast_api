@@ -1,6 +1,4 @@
-from transformers import pipeline
-
-classifier = pipeline("sentiment-analysis")
+from pipelines.sentiment_analysis import classifier
 
 def analyze_sentiment(text: str) -> str:
     result = classifier(text)

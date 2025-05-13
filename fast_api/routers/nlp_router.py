@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from models.message_processing import TextInput, TextOutput
-from services.process_text import process_text
+from services.processor import process_text
 
 router = APIRouter()
 
@@ -8,7 +8,7 @@ router = APIRouter()
 def process_text_request(data: TextInput):
     try:
         # process_text fonksiyonunu kullanarak sonucu al
-        result = process_text(data.input_text, data.operation)
+        result = process_text(data)
 
         if result == "Invalid operation":
             raise HTTPException(status_code=400, detail="Geçersiz işlem türü")
