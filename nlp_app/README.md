@@ -4,6 +4,21 @@ Bu proje, Flutter ile geliştirilmiş bir **Doğal Dil İşleme (NLP)** mobil uy
 
 ---
 
+## Uygulama Görselleri
+
+<p align="center">
+    <img src="nlp_app/assets/images/home.jpg" alt="Ana Sayfa" width="300" />
+    <img src="nlp_app/assets/images/translate.jpg" alt="Ana Sayfa" width="300" />
+    <img src="nlp_app/assets/images/ner.jpg" alt="Ana Sayfa" width="300" />
+    <img src="nlp_app/assets/images/sentiment.jpg" alt="Ana Sayfa" width="300" />
+    <img src="nlp_app/assets/images/classify.jpg" alt="Ana Sayfa" width="300" />
+    <img src="nlp_app/assets/images/tokenization.jpg" alt="Ana Sayfa" width="300" />
+    <img src="nlp_app/assets/images/summary.jpg" alt="Ana Sayfa" width="300" />
+    <img src="nlp_app/assets/images/qa.jpg" alt="Ana Sayfa" width="300" />
+</p>
+
+---
+
 ## 📁 Proje Yapısı
 
 ### `lib/`
