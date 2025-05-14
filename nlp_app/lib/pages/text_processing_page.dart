@@ -16,25 +16,22 @@ class TextProcessingPage extends StatefulWidget {
 }
 
 class _TextProcessingPageState extends State<TextProcessingPage> {
-  final TextEditingController _textController = TextEditingController();
-  final TextEditingController _contextController = TextEditingController();
-  final TextEditingController _questionController = TextEditingController();
-  final TextEditingController _candidateLabelsController =
-      TextEditingController();
+  final _textController = TextEditingController();
+  final _contextController = TextEditingController();
+  final _questionController = TextEditingController();
+  final _candidateLabelsController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    final viewModel = Provider.of<TextProcessingViewModel>(
+    Provider.of<TextProcessingViewModel>(
       context,
       listen: false,
-    );
-    viewModel.loadModelData(widget.fileName);
+    ).loadModelData(widget.fileName);
   }
 
   @override
   void dispose() {
-    // TextEditingController'ları dispose etmek
     _textController.dispose();
     _contextController.dispose();
     _questionController.dispose();
@@ -61,23 +58,24 @@ class _TextProcessingPageState extends State<TextProcessingPage> {
                         children: [
                           Text(model.description),
                           const SizedBox(height: 20),
-                          if (model.operation != "aq") ...[
-                            _buildInputTextField(model),
-                            const SizedBox(height: 20),
-                          ],
-                          const SizedBox(height: 20),
+
+                          if (model.operation != "aq") _buildTextField(model),
                           if (model.operation == "classify")
                             _buildCandidateLabelsField(model),
                           if (model.operation == "aq")
                             _buildContextAndQuestionFields(),
+
+                          const SizedBox(height: 20),
                           _buildSubmitButton(viewModel, model),
                           const SizedBox(height: 20),
+
                           viewModel.result.isNotEmpty
-                              ? _buildResultView(viewModel)
+                              ? _buildResultView(viewModel.result)
                               : Text(model.outputTextPlaceholder),
+
                           const SizedBox(height: 20),
                           const Text("Python Kodu:"),
-                          const SizedBox(height: 15),
+                          const SizedBox(height: 10),
                           HighlightView(
                             model.code,
                             language: 'python',
@@ -93,8 +91,7 @@ class _TextProcessingPageState extends State<TextProcessingPage> {
     );
   }
 
-  // Text Input alanını oluşturuyoruz
-  Widget _buildInputTextField(model) {
+  Widget _buildTextField(model) {
     return TextField(
       controller: _textController,
       maxLines: null,
@@ -105,18 +102,19 @@ class _TextProcessingPageState extends State<TextProcessingPage> {
     );
   }
 
-  // "classify" operation'ı için candidate_labels alanını oluşturuyoruz
   Widget _buildCandidateLabelsField(model) {
-    return TextField(
-      controller: _candidateLabelsController,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(),
-        labelText: model.inputTextPlaceholder,
+    return Padding(
+      padding: const EdgeInsets.only(top: 12.0),
+      child: TextField(
+        controller: _candidateLabelsController,
+        decoration: InputDecoration(
+          border: const OutlineInputBorder(),
+          labelText: "Etiketleri virgülle ayırarak girin",
+        ),
       ),
     );
   }
 
-  // "aq" operation'ı için context ve question alanlarını oluşturuyoruz
   Widget _buildContextAndQuestionFields() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,7 +127,7 @@ class _TextProcessingPageState extends State<TextProcessingPage> {
             labelText: "Context",
           ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 12),
         TextField(
           controller: _questionController,
           decoration: const InputDecoration(
@@ -137,79 +135,88 @@ class _TextProcessingPageState extends State<TextProcessingPage> {
             labelText: "Question",
           ),
         ),
-        const SizedBox(height: 20),
       ],
     );
   }
 
-  // Gönder butonunu oluşturuyoruz
-  Widget _buildSubmitButton(viewModel, model) {
+  Widget _buildSubmitButton(TextProcessingViewModel viewModel, model) {
     return ElevatedButton(
       onPressed:
-          viewModel.isLoading
-              ? null
-              : () async {
-                try {
-                  // Farklı işlemler için farklı parametreleri geçir
-                  if (model.operation == "classify") {
-                    final candidateLabels = _candidateLabelsController.text
-                        .split(',');
-                    await viewModel.analyzeText(
-                      operation: model.operation,
-                      inputText: _textController.text,
-                      candidateLabels: candidateLabels,
-                    );
-                  } else if (model.operation == "aq") {
-                    await viewModel.analyzeText(
-                      operation: model.operation,
-                      inputText: _textController.text,
-                      context: _contextController.text,
-                      question: _questionController.text,
-                    );
-                  } else {
-                    await viewModel.analyzeText(
-                      operation: model.operation,
-                      inputText: _textController.text,
-                    );
-                  }
-                  // Başarı durumunda
-                  Fluttertoast.showToast(
-                    msg: "Göndedildi",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                  );
-                } catch (e) {
-                  // Hata durumunda
-                  Fluttertoast.showToast(
-                    msg: "Hata: $e",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                  );
-                }
-              },
+          viewModel.isLoading ? null : () => _onSubmitPressed(viewModel, model),
       child:
           viewModel.isLoading
-              ? const CircularProgressIndicator()
+              ? const SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              )
               : const Text('Gönder'),
     );
   }
 
-  // Sonuçları ekrana yazdıran widget
-  Widget _buildResultView(viewModel) {
+  Future<void> _onSubmitPressed(
+    TextProcessingViewModel viewModel,
+    model,
+  ) async {
+    FocusScope.of(context).unfocus(); //klavyeyi gizle
+
+    final text = _textController.text.trim();
+    final contextText = _contextController.text.trim();
+    final question = _questionController.text.trim();
+    final labelsText = _candidateLabelsController.text.trim();
+
+    try {
+      if (model.operation == "aq") {
+        if (text.isEmpty || contextText.isEmpty || question.isEmpty) {
+          Fluttertoast.showToast(msg: "Context ve soru alanlarını doldurunuz.");
+          return;
+        }
+        await viewModel.analyzeText(
+          operation: model.operation,
+          inputText: text,
+          context: contextText,
+          question: question,
+        );
+      } else if (model.operation == "classify") {
+        if (text.isEmpty || labelsText.isEmpty) {
+          Fluttertoast.showToast(msg: "Metin ve etiket alanları boş olamaz.");
+          return;
+        }
+        final labels = labelsText.split(',').map((e) => e.trim()).toList();
+        await viewModel.analyzeText(
+          operation: model.operation,
+          inputText: text,
+          candidateLabels: labels,
+        );
+      } else {
+        if (text.isEmpty) {
+          Fluttertoast.showToast(msg: "Lütfen metin giriniz.");
+          return;
+        }
+        await viewModel.analyzeText(
+          operation: model.operation,
+          inputText: text,
+        );
+      }
+      Fluttertoast.showToast(msg: "Gönderildi");
+    } catch (e) {
+      Fluttertoast.showToast(msg: "Hata: $e");
+    }
+  }
+
+  Widget _buildResultView(String result) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text("Çıktı:", style: TextStyle(fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
         Container(
-          padding: const EdgeInsets.all(12.0), // İçerideki padding
+          padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(
-              8.0,
-            ),
+            borderRadius: BorderRadius.circular(8.0),
             border: Border.all(color: primaryAccent, width: 1.5),
           ),
-          child: Text(viewModel.result, style: const TextStyle(fontSize: 16)),
+          child: Text(result, style: const TextStyle(fontSize: 16)),
         ),
       ],
     );

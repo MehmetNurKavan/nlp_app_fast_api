@@ -21,6 +21,7 @@ class TextProcessingViewModel extends ChangeNotifier {
       final data = await _service.loadJson(fileName);
       _model = TextProcessingModel.fromJson(data);
       _error = '';
+      _result = '';
     } catch (e) {
       _error = 'Model verisi yüklenemedi: $e';
     }
@@ -36,6 +37,7 @@ class TextProcessingViewModel extends ChangeNotifier {
   }) async {
     _loading = true;
     _error = '';
+    _result = '';
     notifyListeners();
     try {
       _result = await _service.sendText(
