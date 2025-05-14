@@ -30,7 +30,7 @@ class TextProcessingViewModel extends ChangeNotifier {
 
   Future<void> analyzeText({
     required String operation,
-    required String inputText,
+    String? inputText,
     List<String>? candidateLabels,
     String? context,
     String? question,

@@ -13,7 +13,7 @@ class TextProcessingService {
   }
 
   Future<String> sendText({
-    required String inputText,
+    String? inputText,
     required String operation,
     List<String>? candidateLabels,
     String? context,

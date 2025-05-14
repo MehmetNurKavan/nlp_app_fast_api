@@ -167,13 +167,12 @@ class _TextProcessingPageState extends State<TextProcessingPage> {
 
     try {
       if (model.operation == "aq") {
-        if (text.isEmpty || contextText.isEmpty || question.isEmpty) {
+        if (contextText.isEmpty || question.isEmpty) {
           Fluttertoast.showToast(msg: "Context ve soru alanlarını doldurunuz.");
           return;
         }
         await viewModel.analyzeText(
           operation: model.operation,
-          inputText: text,
           context: contextText,
           question: question,
         );
