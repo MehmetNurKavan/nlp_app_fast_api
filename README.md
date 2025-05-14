@@ -33,7 +33,7 @@ Uygulama arayüzü Flutter ile geliştirilmiş olup, metin işleme ve model işl
     <img src="fast_api/images/sentiment.png" alt="sentiment" width="300" />
     <img src="fast_api/images/classify.png" alt="text classification" width="300" />
     <img src="fast_api/images/tokenization.png" alt="tokenization" width="300" />
-    <img src="fast_api/images/summary.png" alt="text summarization" width="300" />
+    <img src="fast_api/images/summarization.png" alt="text summarization" width="300" />
     <img src="fast_api/images/qa.png" alt="Question and answer" width="300" />
 </p>
 
