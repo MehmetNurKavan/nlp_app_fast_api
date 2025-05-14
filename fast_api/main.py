@@ -13,3 +13,5 @@ def read_root():
 
 # Router ekleniyor
 app.include_router(nlp_router, prefix="/nlp", tags=["NLP Operations"])
+
+# terminalden baslatma kodu: uvicorn main:app --host 0.0.0.0 --port 8000

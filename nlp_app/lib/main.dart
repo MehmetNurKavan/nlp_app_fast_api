@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:nlp_app/pages/my_home_page.dart';
+import 'package:nlp_app/theme/theme.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'viewmodels/text_processing_viewmodel.dart';
 import 'pages/text_processing_page.dart';
 
-void main(){
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
+
   runApp(
     ChangeNotifierProvider(
       create: (_) => TextProcessingViewModel(),
@@ -20,7 +25,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'NLP App',
-      theme: ThemeData.dark(),
+      themeMode: ThemeMode.dark,
+      darkTheme: customDarkTheme,
       debugShowCheckedModeBanner: false,
       home: const MyHomePage(),
       routes: _routes(),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_highlight/flutter_highlight.dart';
 import 'package:flutter_highlight/themes/monokai-sublime.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:nlp_app/theme/colors.dart';
 import 'package:nlp_app/viewmodels/text_processing_viewmodel.dart';
 import 'package:provider/provider.dart';
 
@@ -66,13 +67,14 @@ class _TextProcessingPageState extends State<TextProcessingPage> {
                           ],
                           const SizedBox(height: 20),
                           if (model.operation == "classify")
-                            _buildCandidateLabelsField(),
+                            _buildCandidateLabelsField(model),
                           if (model.operation == "aq")
                             _buildContextAndQuestionFields(),
                           _buildSubmitButton(viewModel, model),
                           const SizedBox(height: 20),
-                          if (viewModel.result.isNotEmpty)
-                            _buildResultView(viewModel),
+                          viewModel.result.isNotEmpty
+                              ? _buildResultView(viewModel)
+                              : Text(model.outputTextPlaceholder),
                           const SizedBox(height: 20),
                           const Text("Python Kodu:"),
                           const SizedBox(height: 15),
@@ -104,12 +106,12 @@ class _TextProcessingPageState extends State<TextProcessingPage> {
   }
 
   // "classify" operation'ı için candidate_labels alanını oluşturuyoruz
-  Widget _buildCandidateLabelsField() {
+  Widget _buildCandidateLabelsField(model) {
     return TextField(
       controller: _candidateLabelsController,
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         border: OutlineInputBorder(),
-        labelText: "Candidate Labels (comma separated)",
+        labelText: model.inputTextPlaceholder,
       ),
     );
   }
@@ -135,6 +137,7 @@ class _TextProcessingPageState extends State<TextProcessingPage> {
             labelText: "Question",
           ),
         ),
+        const SizedBox(height: 20),
       ],
     );
   }
@@ -146,11 +149,6 @@ class _TextProcessingPageState extends State<TextProcessingPage> {
           viewModel.isLoading
               ? null
               : () async {
-                // Yükleniyor göstergesi
-                setState(() {
-                  viewModel._loading = true;
-                });
-
                 try {
                   // Farklı işlemler için farklı parametreleri geçir
                   if (model.operation == "classify") {
@@ -176,7 +174,7 @@ class _TextProcessingPageState extends State<TextProcessingPage> {
                   }
                   // Başarı durumunda
                   Fluttertoast.showToast(
-                    msg: "İşlem başarılı!",
+                    msg: "Göndedildi",
                     toastLength: Toast.LENGTH_SHORT,
                     gravity: ToastGravity.BOTTOM,
                   );
@@ -187,11 +185,6 @@ class _TextProcessingPageState extends State<TextProcessingPage> {
                     toastLength: Toast.LENGTH_SHORT,
                     gravity: ToastGravity.BOTTOM,
                   );
-                } finally {
-                  // Yükleniyor göstergesi kaldırma
-                  setState(() {
-                    viewModel._loading = false;
-                  });
                 }
               },
       child:
@@ -208,7 +201,16 @@ class _TextProcessingPageState extends State<TextProcessingPage> {
       children: [
         const Text("Çıktı:", style: TextStyle(fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
-        Text(viewModel.result),
+        Container(
+          padding: const EdgeInsets.all(12.0), // İçerideki padding
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(
+              8.0,
+            ),
+            border: Border.all(color: primaryAccent, width: 1.5),
+          ),
+          child: Text(viewModel.result, style: const TextStyle(fontSize: 16)),
+        ),
       ],
     );
   }
