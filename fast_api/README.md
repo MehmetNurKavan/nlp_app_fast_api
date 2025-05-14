@@ -73,11 +73,11 @@ Bu proje, **FastAPI** kullanarak geliştirilmiş bir API uygulamasıdır. Hızl�
 ## Postman'den atilan post görselleri ve json yapıları
 
 <p align="center">
-    <img src="fast_api/images/translate.png" alt="translate" width="300" />
-    <img src="fast_api/images/entitiy.png" alt="ner" width="300" />
-    <img src="fast_api/images/sentiment.png" alt="sentiment" width="300" />
-    <img src="fast_api/images/classify.png" alt="text classification" width="300" />
-    <img src="fast_api/images/tokenization.png" alt="tokenization" width="300" />
-    <img src="fast_api/images/summary.png" alt="text summarization" width="300" />
-    <img src="fast_api/images/qa.png" alt="Question and answer" width="300" />
+    <img src="images/translate.png" alt="translate" width="300" />
+    <img src="images/entitiy.png" alt="ner" width="300" />
+    <img src="images/sentiment.png" alt="sentiment" width="300" />
+    <img src="images/classify.png" alt="text classification" width="300" />
+    <img src="images/tokenization.png" alt="tokenization" width="300" />
+    <img src="images/summarization.png" alt="text summarization" width="300" />
+    <img src="images/qa.png" alt="Question and answer" width="300" />
 </p>
